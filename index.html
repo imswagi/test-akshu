@@ -1,271 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Akshu Career Portal</title>
-  <style>
-    /* --- CSS STYLES --- */
-    :root {
-      --primary: #2563eb;
-      --sidebar: #1e293b;
-      --bg: #f3f4f6;
-      --text-dark: #1f2937;
-      --text-light: #9ca3af;
-      --white: #ffffff;
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: var(--bg); color: var(--text-dark); }
-
-    /* Login Screen */
-    #login-screen {
-      display: flex; justify-content: center; align-items: center; height: 100vh;
-    }
-    .login-box {
-      background: var(--white); padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; width: 350px;
-    }
-    .login-box h1 { margin-bottom: 0.5rem; font-size: 1.5rem; }
-    .login-box p { color: var(--text-light); margin-bottom: 1.5rem; font-size: 0.9rem; }
-    .btn {
-      display: block; width: 100%; padding: 0.75rem; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 1rem; font-size: 1rem; color: var(--white);
-    }
-    .btn-recruiter { background-color: var(--primary); }
-    .btn-admin { background-color: var(--sidebar); }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruitment Consultancy Management System</title>
     
-    /* Dashboard Layout */
-    #dashboard { display: none; height: 100vh; }
-    
-    /* Sidebar */
-    .sidebar {
-      width: 250px; background-color: var(--sidebar); color: var(--white); display: flex; flex-direction: column;
-    }
-    .sidebar-header { padding: 1.5rem; font-size: 1.25rem; font-weight: bold; border-bottom: 1px solid #334155; }
-    .sidebar-nav { flex: 1; padding: 1rem; }
-    .nav-btn {
-      width: 100%; text-align: left; background: none; color: var(--white); border: none; padding: 0.75rem 1rem; cursor: pointer; border-radius: 4px; margin-bottom: 0.5rem; font-size: 1rem;
-    }
-    .nav-btn:hover, .nav-btn.active { background-color: #334155; }
-    .sidebar-footer { padding: 1rem; border-top: 1px solid #334155; font-size: 0.85rem; }
-    .logout-btn { background-color: #ef4444; width: 100%; margin-top: 0.5rem; }
+    <!-- Tailwind CSS (per requirements) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#1d4ed8', sidebar: '#1e293b' }
+                }
+            }
+        }
+    </script>
 
-    /* Main Content */
-    .main-content { flex: 1; padding: 2rem; overflow-y: auto; }
-    .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-    .header-row h2 { font-size: 1.8rem; }
-    .btn-add { background-color: #10b981; width: auto; padding: 0.5rem 1rem; margin: 0; }
-
-    /* Tables */
-    .table-container { background: var(--white); border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; }
-    table { width: 100%; border-collapse: collapse; text-align: left; }
-    th, td { padding: 1rem; border-bottom: 1px solid #e5e7eb; }
-    th { background-color: #f9fafb; font-weight: 600; color: #4b5563; }
-    tr:hover { background-color: #f9fafb; }
-    .status-badge { padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.85rem; font-weight: bold; }
-    .status-hired { background-color: #d1fae5; color: #065f46; }
-    .status-pending { background-color: #fef3c7; color: #92400e; }
-    
-    /* View Toggling */
-    .view-section { display: none; }
-    .view-section.active { display: block; }
-  </style>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./style.css">
 </head>
-<body>
+<body class="bg-gray-100 text-gray-800 font-sans h-screen overflow-hidden flex">
 
-  <!-- LOGIN SCREEN -->
-  <div id="login-screen">
-    <div class="login-box">
-      <h1>Akshu Career Portal</h1>
-      <p>Select a role to preview the interface</p>
-      <button class="btn btn-recruiter" onclick="login('recruiter')">Login as Recruiter</button>
-      <button class="btn btn-admin" onclick="login('admin')">Login as Admin</button>
-    </div>
-  </div>
-
-  <!-- DASHBOARD -->
-  <div id="dashboard" style="display: flex;">
-    
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <div class="sidebar-header">Akshu Career</div>
-      <div class="sidebar-nav">
-        <button id="nav-candidates" class="nav-btn active" onclick="switchView('candidates')">Candidate Tracker</button>
-        <!-- Admin only button -->
-        <button id="nav-expenses" class="nav-btn" onclick="switchView('expenses')" style="display: none;">Expense Tracker</button>
-      </div>
-      <div class="sidebar-footer">
-        <div id="user-info">Logged in as: User</div>
-        <button class="btn logout-btn" onclick="logout()">Log Out</button>
-      </div>
+    <!-- LOGIN SCREEN -->
+    <div id="login-screen" class="absolute inset-0 bg-gray-100 flex items-center justify-center z-50 fade-in">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-96 text-center">
+            <h1 class="text-2xl font-bold text-gray-800 mb-2">Recruitment System</h1>
+            <p class="text-gray-500 mb-6 text-sm">Sign in to your account</p>
+            <button onclick="login('recruiter')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded mb-3 transition">
+                Login as Recruiter
+            </button>
+            <button onclick="login('admin')" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-semibold py-2 px-4 rounded transition">
+                Login as Administrator
+            </button>
+        </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-content">
-      
-      <!-- Candidates View -->
-      <div id="view-candidates" class="view-section active">
-        <div class="header-row">
-          <h2>Undergraduate Candidates</h2>
-          <button class="btn btn-add">+ Add Candidate</button>
+    <!-- SIDEBAR NAVIGATION -->
+    <aside id="sidebar" class="w-64 bg-sidebar text-white hidden flex-col h-full slide-in-left">
+        <div class="p-6 border-b border-slate-700">
+            <h2 class="text-xl font-bold tracking-wider">RCMS Portal</h2>
         </div>
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Contact</th>
-                <th>Posting Location</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="candidate-table-body">
-              <!-- Rows injected by JavaScript -->
-            </tbody>
-          </table>
+        <nav class="flex-1 p-4 space-y-2 overflow-y-auto custom-scrollbar">
+            <button onclick="switchView('dashboard')" class="nav-btn w-full text-left px-4 py-2 rounded hover:bg-slate-700 transition" id="nav-dashboard">Dashboard</button>
+            <button onclick="switchView('candidates')" class="nav-btn w-full text-left px-4 py-2 rounded hover:bg-slate-700 transition" id="nav-candidates">Candidate Management</button>
+            
+            <div id="admin-menu" class="hidden space-y-2 mt-4 pt-4 border-t border-slate-700">
+                <p class="text-xs text-slate-400 uppercase font-bold px-4 mb-2">Administration</p>
+                <button onclick="switchView('recruiters')" class="nav-btn w-full text-left px-4 py-2 rounded hover:bg-slate-700 transition" id="nav-recruiters">Manage Recruiters</button>
+                <button onclick="switchView('financials')" class="nav-btn w-full text-left px-4 py-2 rounded hover:bg-slate-700 transition" id="nav-financials">Financials & Tender</button>
+                <button onclick="switchView('attendance')" class="nav-btn w-full text-left px-4 py-2 rounded hover:bg-slate-700 transition" id="nav-attendance">Attendance & Salary</button>
+                <button onclick="switchView('reports')" class="nav-btn w-full text-left px-4 py-2 rounded hover:bg-slate-700 transition" id="nav-reports">Reports</button>
+            </div>
+        </nav>
+        <div class="p-4 border-t border-slate-700 text-sm">
+            <p id="user-display" class="mb-2 text-slate-300">User: </p>
+            <button onclick="logout()" class="w-full bg-red-600 hover:bg-red-700 text-white py-1.5 rounded transition">Log Out</button>
         </div>
-      </div>
+    </aside>
 
-      <!-- Expenses View (Admin Only) -->
-      <div id="view-expenses" class="view-section">
-        <div class="header-row">
-          <h2>Company Expenses</h2>
-          <button class="btn btn-add">+ Log Expense</button>
+    <!-- MAIN CONTENT AREA -->
+    <main id="main-content" class="flex-1 hidden flex-col h-full overflow-y-auto custom-scrollbar">
+        <div class="p-8 w-full max-w-7xl mx-auto space-y-8">
+
+            <!-- 1. DASHBOARD VIEW -->
+            <section id="view-dashboard" class="view-section hidden fade-in">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6" id="dashboard-title">Dashboard</h2>
+                
+                <div id="admin-stats" class="hidden grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="stat-card border-blue-500">
+                        <p class="stat-title">Total Candidates</p>
+                        <p class="stat-value">1,245</p>
+                    </div>
+                    <div class="stat-card border-green-500">
+                        <p class="stat-title">Monthly Profit</p>
+                        <p class="stat-value">₹85,000</p>
+                        <p class="text-xs text-gray-400 mt-1">Revenue: ₹120,000 | Exp: ₹35,000</p>
+                    </div>
+                    <div class="stat-card border-purple-500">
+                        <p class="stat-title">Monthly Target Remaining</p>
+                        <p class="stat-value">₹15,000</p>
+                    </div>
+                </div>
+
+                <div id="recruiter-stats" class="hidden grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="stat-card border-blue-500">
+                        <p class="stat-title">My Candidates</p>
+                        <p class="stat-value">42</p>
+                    </div>
+                    <div class="stat-card border-yellow-500">
+                        <p class="stat-title">Pending Calls</p>
+                        <p class="stat-value">12</p>
+                    </div>
+                    <div class="stat-card border-green-500">
+                        <p class="stat-title">Selected Candidates</p>
+                        <p class="stat-value">5</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. CANDIDATE MANAGEMENT VIEW -->
+            <section id="view-candidates" class="view-section hidden fade-in">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Candidate Management</h2>
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 transition">+ Add Candidate</button>
+                </div>
+                
+                <div class="bg-white p-4 rounded-lg shadow mb-6 flex gap-4 flex-wrap">
+                    <input type="text" placeholder="Search by Name/Mobile..." class="border p-2 rounded flex-1 min-w-[200px]">
+                    <select class="border p-2 rounded text-gray-600">
+                        <option>All Statuses</option>
+                        <option>Pending</option>
+                        <option>Follow Up</option>
+                        <option>Selected</option>
+                    </select>
+                    <button class="bg-gray-200 px-4 py-2 rounded text-gray-700 hover:bg-gray-300">Filter</button>
+                </div>
+
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-50 text-gray-600 text-sm uppercase">
+                            <tr>
+                                <th class="p-4 border-b">Candidate Details</th>
+                                <th class="p-4 border-b">Experience</th>
+                                <th class="p-4 border-b">Applied Position</th>
+                                <th class="p-4 border-b">Call Status</th>
+                                <th class="p-4 border-b">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="p-4 border-b">
+                                    <p class="font-bold text-gray-800">Amit Kumar</p>
+                                    <p class="text-xs text-gray-500">+91 9876543210 | amit@email.com</p>
+                                </td>
+                                <td class="p-4 border-b">3 Years (B.Tech)</td>
+                                <td class="p-4 border-b">Software Developer</td>
+                                <td class="p-4 border-b"><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs font-bold">Pending</span></td>
+                                <td class="p-4 border-b"><button class="text-blue-600 hover:underline">Update</button></td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="p-4 border-b">
+                                    <p class="font-bold text-gray-800">Neha Sharma</p>
+                                    <p class="text-xs text-gray-500">+91 9123456789</p>
+                                </td>
+                                <td class="p-4 border-b">Fresher (MBA)</td>
+                                <td class="p-4 border-b">HR Executive</td>
+                                <td class="p-4 border-b"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">Selected</span></td>
+                                <td class="p-4 border-b"><button class="text-blue-600 hover:underline">Update</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 3. FINANCIAL & TENDER MANAGEMENT -->
+            <section id="view-financials" class="view-section hidden fade-in">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Financials & Tender Management</h2>
+                    <button class="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600 transition">+ Add Expense</button>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-lg font-bold mb-4 border-b pb-2">Set Tender Period</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Select Candidate</label>
+                                <select class="w-full border p-2 rounded"><option>Neha Sharma (HR Executive)</option></select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tender Duration</label>
+                                <select class="w-full border p-2 rounded">
+                                    <option>15 Days</option><option>30 Days</option><option>60 Days</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Amount to be Collected</label>
+                                <input type="number" class="w-full border p-2 rounded" placeholder="₹ Amount">
+                            </div>
+                            <button class="bg-blue-600 text-white px-4 py-2 rounded shadow w-full">Generate Tender End Date</button>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-lg font-bold mb-4 border-b pb-2">Pending Collections</h3>
+                        <ul class="space-y-3">
+                            <li class="flex justify-between items-center p-3 bg-red-50 border border-red-200 rounded">
+                                <div>
+                                    <p class="font-bold text-red-800">Rahul Singh - Infosys</p>
+                                    <p class="text-xs text-red-600">Tender Expired: 2 days ago</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold">₹15,000</p>
+                                    <button class="text-xs bg-green-500 text-white px-2 py-1 rounded mt-1">Mark Paid</button>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. ATTENDANCE & SALARY MANAGEMENT -->
+            <section id="view-attendance" class="view-section hidden fade-in">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Attendance & Salary Management</h2>
+                <div class="bg-white rounded-lg shadow p-6 mb-8">
+                    <h3 class="text-lg font-bold mb-4">Recruiter Salary Config & Calculation</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
+                        <div class="bg-gray-50 p-3 rounded border">
+                            <p class="text-gray-500">Monthly Salary</p><p class="font-bold text-lg">₹ 20,000</p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded border">
+                            <p class="text-gray-500">Total Working Days</p><p class="font-bold text-lg">30</p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded border">
+                            <p class="text-gray-500">Per Day Salary</p><p class="font-bold text-lg">₹ 666.67</p>
+                        </div>
+                        <div class="bg-green-50 p-3 rounded border border-green-200 text-green-800">
+                            <p class="text-green-600">Net Payable Salary</p><p class="font-bold text-2xl">₹ 18,000.09</p>
+                        </div>
+                    </div>
+                    <h4 class="font-semibold mb-2">Attendance Breakdown (Current Month)</h4>
+                    <div class="flex gap-2 mb-4 flex-wrap">
+                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Present: 20</span>
+                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Half Day: 2</span>
+                        <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">Leave: 4</span>
+                        <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">Holiday: 2</span>
+                        <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">Absent: 2</span>
+                    </div>
+                </div>
+            </section>
         </div>
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Category</th>
-                <th>Description</th>
-                <th>Amount (₹)</th>
-              </tr>
-            </thead>
-            <tbody id="expense-table-body">
-              <!-- Rows injected by JavaScript -->
-            </tbody>
-          </table>
-        </div>
-      </div>
+    </main>
 
-    </div>
-  </div>
-
-  <script>
-    /* --- JAVASCRIPT LOGIC --- */
-    
-    let currentUser = null;
-
-    // --- MOCK DATA (To be replaced by PHP/MySQL) ---
-    const mockCandidates = [
-      { id: 1, name: "Aarav Gupta", email: "aarav@example.com", phone: "9876543210", location: "Pune", status: "Hired" },
-      { id: 2, name: "Sneha Rao", email: "sneha@example.com", phone: "9123456789", location: "Delhi", status: "Interviewing" }
-    ];
-
-    const mockExpenses = [
-      { id: 1, date: "2026-07-10", category: "Marketing", desc: "College flyer printing", amount: 4500 },
-      { id: 2, date: "2026-07-12", category: "Software", desc: "Job portal subscription", amount: 8000 }
-    ];
-
-    // --- AUTHENTICATION & RBAC ---
-    function login(role) {
-      // Set current user state
-      currentUser = { 
-        name: role === 'admin' ? "Admin User" : "Recruiter User", 
-        role: role 
-      };
-
-      // Hide login, show dashboard
-      document.getElementById('login-screen').style.display = 'none';
-      document.getElementById('dashboard').style.display = 'flex';
-      
-      // Update sidebar UI
-      document.getElementById('user-info').innerHTML = `Logged in as: <strong>${currentUser.name}</strong>`;
-
-      // ENFORCE ROLE-BASED ACCESS CONTROL
-      const navExpenses = document.getElementById('nav-expenses');
-      if (currentUser.role === 'admin') {
-        navExpenses.style.display = 'block'; // Reveal for admin
-      } else {
-        navExpenses.style.display = 'none'; // Hide for recruiter
-      }
-
-      // Initialize default view
-      switchView('candidates');
-    }
-
-    function logout() {
-      currentUser = null;
-      document.getElementById('dashboard').style.display = 'none';
-      document.getElementById('login-screen').style.display = 'flex';
-    }
-
-    // --- NAVIGATION LOGIC ---
-    function switchView(viewName) {
-      // 1. Hide all views
-      document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-
-      // 2. Show requested view
-      document.getElementById(`view-${viewName}`).classList.add('active');
-      document.getElementById(`nav-${viewName}`).classList.add('active');
-
-      // 3. Load data for that view
-      if (viewName === 'candidates') loadCandidates();
-      if (viewName === 'expenses') loadExpenses();
-    }
-
-    // --- DATA RENDERING (Integration points for PHP) ---
-    function loadCandidates() {
-      const tbody = document.getElementById('candidate-table-body');
-      tbody.innerHTML = ''; // Clear table
-      
-      // FUTURE PHP INTEGRATION:
-      // fetch('api/get_candidates.php')
-      //   .then(response => response.json())
-      //   .then(data => { ... render loop below ... })
-
-      mockCandidates.forEach(c => {
-        const statusClass = c.status === 'Hired' ? 'status-hired' : 'status-pending';
-        const row = `
-          <tr>
-            <td><strong>${c.name}</strong></td>
-            <td style="color: #6b7280; font-size: 0.9rem;">
-              <div>${c.email}</div>
-              <div>${c.phone}</div>
-            </td>
-            <td>${c.location}</td>
-            <td><span class="status-badge ${statusClass}">${c.status}</span></td>
-          </tr>
-        `;
-        tbody.innerHTML += row;
-      });
-    }
-
-    function loadExpenses() {
-      const tbody = document.getElementById('expense-table-body');
-      tbody.innerHTML = ''; 
-
-      // FUTURE PHP INTEGRATION:
-      // fetch('api/get_expenses.php')
-      //   .then(response => response.json())
-      //   .then(data => { ... render loop below ... })
-
-      mockExpenses.forEach(e => {
-        const row = `
-          <tr>
-            <td style="color: #6b7280;">${e.date}</td>
-            <td>${e.category}</td>
-            <td>${e.desc}</td>
-            <td style="font-weight: bold;">₹${e.amount.toLocaleString('en-IN')}</td>
-          </tr>
-        `;
-        tbody.innerHTML += row;
-      });
-    }
-
-    // Ensure dashboard is hidden on first load
-    document.getElementById('dashboard').style.display = 'none';
-  </script>
+    <!-- Custom JS -->
+    <script src="./script.js"></script>
 </body>
 </html>
